@@ -2,8 +2,20 @@
 #include "MainPage.h"
 #include "MainPage.g.cpp"
 
+#include "Tracy.hpp"
+
 using namespace winrt;
 using namespace Windows::UI::Xaml;
+
+namespace {
+    // Naive exponential method to keep app busy
+    int GetFibonacci(unsigned int nth) {
+        if (nth < 2) {
+            return 1;
+        }
+        return GetFibonacci(nth - 1) + GetFibonacci(nth - 2);
+    }
+}
 
 namespace winrt::TracyTest::implementation
 {
@@ -12,18 +24,27 @@ namespace winrt::TracyTest::implementation
         InitializeComponent();
     }
 
-    int32_t MainPage::MyProperty()
+    void MainPage::ZoneScopedClickHandler(IInspectable const&, RoutedEventArgs const&)
     {
-        throw hresult_not_implemented();
+        ZoneScoped;
+
+        GetFibonacci(35);
     }
 
-    void MainPage::MyProperty(int32_t /* value */)
+    void MainPage::ZoneScopedNClickHandler(IInspectable const&, RoutedEventArgs const&)
     {
-        throw hresult_not_implemented();
+        ZoneScopedN("Named scope");
+
+        GetFibonacci(40);
     }
 
-    void MainPage::ClickHandler(IInspectable const&, RoutedEventArgs const&)
+    void MainPage::FrameMarkClickHandler(IInspectable const&, RoutedEventArgs const&)
     {
-        myButton().Content(box_value(L"Clicked"));
+        static constexpr char s_frameName[] = "Frame name";
+        FrameMarkStart(s_frameName);
+
+        GetFibonacci(45);
+
+        FrameMarkEnd(s_frameName);
     }
 }
