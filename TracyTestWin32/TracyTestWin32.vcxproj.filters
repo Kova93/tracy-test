@@ -32,7 +32,7 @@
     <ClCompile Include="TracyTestWin32.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\tracy\TracyClient.cpp">
+    <ClCompile Include="..\tracy\public\TracyClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
